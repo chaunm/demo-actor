@@ -4,5 +4,5 @@
 
 USER_OBJS :=
 
-LIBS := -lm -luuid -ljansson -lmosquitto
+LIBS := -ljansson -lmosquitto -lm -luuid
 

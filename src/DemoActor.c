@@ -119,7 +119,7 @@ int main()
 		if(FirstSend == FALSE)
 		{
 			FirstSend = TRUE;
-			ActorSend(pPingActor, pingSendTopic, pingSendMessage, NULL, TRUE);
+			ActorSend(pPingActor, pingSendTopic, pingSendMessage, PingActorResponseCallback, TRUE);
 			free(pingSendMessage);
 			free(pingSendTopic);
 		}

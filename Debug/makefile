@@ -31,7 +31,7 @@ all: DemoActor
 DemoActor: $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: Cross GCC Linker'
-	arm-linux-gnueabihf-gcc -L/home/chaunm/Working/ZigbeeHost/RpiProj/src/lib/jansson -L/home/chaunm/Working/ZigbeeHost/RpiProj/src/lib/lib-mosquitto -L/home/chaunm/Working/ZigbeeHost/RpiProj/src/lib/uuid/lib -Wl,-rpath=/home/chaunm/Working/ZigbeeHost/RpiProj/src/lib/lib-ssl -o "DemoActor" $(OBJS) $(USER_OBJS) $(LIBS)
+	arm-linux-gnueabihf-gcc -L"/home/chaunm/Working/ZigbeeHost/DemoActor/src/lib/jansson" -L"/home/chaunm/Working/ZigbeeHost/DemoActor/src/lib/uuid/lib" -L"/home/chaunm/Working/ZigbeeHost/DemoActor/src/lib/lib-mosquitto" -Wl,-rpath=/home/chaunm/Working/ZigbeeHost/DemoActor/src/lib/lib-ssl -o "DemoActor" $(OBJS) $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 
