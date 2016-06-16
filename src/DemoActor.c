@@ -118,6 +118,7 @@ int main()
 		mosquitto_loop(pPongActor->client, 0, 1);
 		if(FirstSend == FALSE)
 		{
+			printf("send initialize message\n");
 			FirstSend = TRUE;
 			ActorSend(pPingActor, pingSendTopic, pingSendMessage, PingActorResponseCallback, TRUE);
 			free(pingSendMessage);
