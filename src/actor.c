@@ -64,7 +64,11 @@ void ActorEmitEvent(PACTOR pActor,const char* event, void* pParam)
 {
 	PACTOREVENT pEvent = (PACTOREVENT)malloc(sizeof(ACTOREVENT));
 	PACTOREVENT pProcessingEvent = pActor->pEvent;
-	if (event == NULL) return;
+	if (event == NULL)
+	{
+		free(pEvent);
+		return;
+	}
 	pEvent->event = StrDup(event);
 	pEvent->callbackParam = pParam;
 	pEvent->NextEvent = NULL;
@@ -99,8 +103,7 @@ void ActorProcessEvent(PACTOR pActor)
 				// check if callback need to be deleted
 				if (pProcessingCallback->callbackType == CALLBACK_ONCE)
 				{
-					pSearchCallback = pActor->pActorCallback;
-					if (pSearchCallback == pProcessingCallback)
+					if (pActor->pActorCallback == pProcessingCallback)
 					{
 						pActor->pActorCallback = pProcessingCallback->nextCallback;
 						free(pProcessingCallback->event);
@@ -108,14 +111,12 @@ void ActorProcessEvent(PACTOR pActor)
 					}
 					else
 					{
+						pSearchCallback = pActor->pActorCallback;
 						while (pSearchCallback->nextCallback != pProcessingCallback)
 							pSearchCallback = pSearchCallback->nextCallback;
-						if (pSearchCallback == pProcessingCallback)
-						{
-							pSearchCallback->nextCallback = pProcessingCallback->nextCallback;
-							free(pProcessingCallback->event);
-							free(pProcessingCallback);
-						}
+						pSearchCallback->nextCallback = pProcessingCallback->nextCallback;
+						free(pProcessingCallback->event);
+						free(pProcessingCallback);
 					}
 				}
 				break;
@@ -191,7 +192,6 @@ int ActorConnect(PACTOR pActor, char* guid, char* psw)
     {
     	client = mosquitto_new(guid, TRUE, (void*)pActor);
     	pActor->client = client;
-    	printf("%p\n", pActor);
     	// Setting callback for connection
     	mosquitto_connect_callback_set(client, ActorOnConnect);
     	mosquitto_disconnect_callback_set(client, ActorOnOffline);
@@ -322,10 +322,9 @@ void ActorReceive(PACTOR pActor, char* topicName, char* payload)
 		i = relTopicPosition;
 		while (*(TopicNameSplit + i))
 		{
-			relTopicSize += strlen(*(TopicNameSplit + i));
+			relTopicSize += strlen(*(TopicNameSplit + i)) + 1;
 			i++;
 		}
-		relTopicSize++; // to ensure that the final byte of the relative topic name is 0, so the string format is valid
 		relTopic = malloc(relTopicSize);
 		memset(relTopic, 0, relTopicSize);
 		sprintf(relTopic,"%s", *(TopicNameSplit + relTopicPosition));
@@ -489,7 +488,6 @@ void ActorOnOffline(struct mosquitto* client, void * context, int cause)
 void ActorOnConnect(struct mosquitto* client, void* context, int result)
 {
 	PACTOR pActor = (PACTOR)context;
-	printf("%p", context);
 	printf("%s actor connected %d\n", pActor->guid, result);
 	if (result == 0)
 		pActor->connected = 1;
