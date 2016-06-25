@@ -136,6 +136,7 @@ PACTOR ActorCreate(char* guid, char* psw)
 	if ((guid == NULL))
 		return NULL;
 	PACTOR pActor = (PACTOR)malloc(sizeof(ACTOR));
+	memset(pActor, 0, sizeof(ACTOR));
 	pActor->guid = StrDup(guid);
 	pActor->psw = StrDup(psw);
 	ActorConnect(pActor, pActor->guid, pActor->psw);
@@ -190,6 +191,7 @@ int ActorConnect(PACTOR pActor, char* guid, char* psw)
     {
     	client = mosquitto_new(guid, TRUE, (void*)pActor);
     	pActor->client = client;
+    	printf("%p\n", pActor);
     	// Setting callback for connection
     	mosquitto_connect_callback_set(client, ActorOnConnect);
     	mosquitto_disconnect_callback_set(client, ActorOnOffline);
@@ -487,6 +489,7 @@ void ActorOnOffline(struct mosquitto* client, void * context, int cause)
 void ActorOnConnect(struct mosquitto* client, void* context, int result)
 {
 	PACTOR pActor = (PACTOR)context;
+	printf("%p", context);
 	printf("%s actor connected %d\n", pActor->guid, result);
 	if (result == 0)
 		pActor->connected = 1;
