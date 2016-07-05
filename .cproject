@@ -22,25 +22,25 @@
 							<targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.ELF" id="cdt.managedbuild.targetPlatform.gnu.cross.989078964" isAbstract="false" osList="all" superClass="cdt.managedbuild.targetPlatform.gnu.cross"/>
 							<builder buildPath="${workspace_loc:/DemoActor}/Debug" id="cdt.managedbuild.builder.gnu.cross.354383065" keepEnvironmentInBuildfile="false" name="Gnu Make Builder" superClass="cdt.managedbuild.builder.gnu.cross"/>
 							<tool id="cdt.managedbuild.tool.gnu.cross.c.compiler.1135280035" name="Cross GCC Compiler" superClass="cdt.managedbuild.tool.gnu.cross.c.compiler">
-								<option defaultValue="gnu.c.optimization.level.none" id="gnu.c.compiler.option.optimization.level.1098091119" name="Optimization Level" superClass="gnu.c.compiler.option.optimization.level" valueType="enumerated"/>
-								<option id="gnu.c.compiler.option.debugging.level.1499715798" name="Debug Level" superClass="gnu.c.compiler.option.debugging.level" value="gnu.c.debugging.level.max" valueType="enumerated"/>
-								<option id="gnu.c.compiler.option.include.files.1013308231" name="Include files (-include)" superClass="gnu.c.compiler.option.include.files" valueType="includeFiles">
+								<option defaultValue="gnu.c.optimization.level.none" id="gnu.c.compiler.option.optimization.level.1098091119" name="Optimization Level" superClass="gnu.c.compiler.option.optimization.level" useByScannerDiscovery="false" valueType="enumerated"/>
+								<option id="gnu.c.compiler.option.debugging.level.1499715798" name="Debug Level" superClass="gnu.c.compiler.option.debugging.level" useByScannerDiscovery="false" value="gnu.c.debugging.level.max" valueType="enumerated"/>
+								<option id="gnu.c.compiler.option.include.files.1013308231" name="Include files (-include)" superClass="gnu.c.compiler.option.include.files" useByScannerDiscovery="false" valueType="includeFiles">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/universal/typesdef.h}&quot;"/>
 								</option>
-								<option id="gnu.c.compiler.option.include.paths.1847169076" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" valueType="includePath">
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/DemoActor/src/universal}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/DemoActor/src/lib/jansson}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/DemoActor/src/lib/lib-mosquitto}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/DemoActor/src/lib/uuid/include}&quot;"/>
+								<option id="gnu.c.compiler.option.include.paths.1847169076" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" useByScannerDiscovery="false" valueType="includePath">
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/demo-actor/src/universal}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/demo-actor/src/lib/jansson}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/demo-actor/src/lib/lib-mosquitto}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/demo-actor/src/lib/uuid/include}&quot;"/>
 								</option>
-								<option id="gnu.c.compiler.option.preprocessor.def.symbols.1699404011" name="Defined symbols (-D)" superClass="gnu.c.compiler.option.preprocessor.def.symbols" valueType="definedSymbols">
+								<option id="gnu.c.compiler.option.preprocessor.def.symbols.1699404011" name="Defined symbols (-D)" superClass="gnu.c.compiler.option.preprocessor.def.symbols" useByScannerDiscovery="false" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="PI_RUNNING"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.1875048770" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
 							</tool>
 							<tool id="cdt.managedbuild.tool.gnu.cross.cpp.compiler.179169119" name="Cross G++ Compiler" superClass="cdt.managedbuild.tool.gnu.cross.cpp.compiler">
-								<option id="gnu.cpp.compiler.option.optimization.level.1336921446" name="Optimization Level" superClass="gnu.cpp.compiler.option.optimization.level" value="gnu.cpp.compiler.optimization.level.none" valueType="enumerated"/>
-								<option id="gnu.cpp.compiler.option.debugging.level.2050585256" name="Debug Level" superClass="gnu.cpp.compiler.option.debugging.level" value="gnu.cpp.compiler.debugging.level.max" valueType="enumerated"/>
+								<option id="gnu.cpp.compiler.option.optimization.level.1336921446" name="Optimization Level" superClass="gnu.cpp.compiler.option.optimization.level" useByScannerDiscovery="false" value="gnu.cpp.compiler.optimization.level.none" valueType="enumerated"/>
+								<option id="gnu.cpp.compiler.option.debugging.level.2050585256" name="Debug Level" superClass="gnu.cpp.compiler.option.debugging.level" useByScannerDiscovery="false" value="gnu.cpp.compiler.debugging.level.max" valueType="enumerated"/>
 							</tool>
 							<tool id="cdt.managedbuild.tool.gnu.cross.c.linker.563994922" name="Cross GCC Linker" superClass="cdt.managedbuild.tool.gnu.cross.c.linker">
 								<option id="gnu.c.link.option.libs.1275796078" name="Libraries (-l)" superClass="gnu.c.link.option.libs" valueType="libs">
@@ -50,11 +50,11 @@
 									<listOptionValue builtIn="false" srcPrefixMapping="" srcRootPath="" value="uuid"/>
 								</option>
 								<option id="gnu.c.link.option.paths.1326333030" name="Library search path (-L)" superClass="gnu.c.link.option.paths" valueType="libPaths">
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/DemoActor/src/lib/jansson}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/DemoActor/src/lib/uuid/lib}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/DemoActor/src/lib/lib-mosquitto}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/demo-actor/src/lib/jansson}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/demo-actor/src/lib/uuid/lib}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/demo-actor/src/lib/lib-mosquitto}&quot;"/>
 								</option>
-								<option id="gnu.c.link.option.ldflags.929856570" superClass="gnu.c.link.option.ldflags" value="-Wl,-rpath=/home/chaunm/Working/ZigbeeHost/DemoActor/src/lib/lib-ssl" valueType="string"/>
+								<option id="gnu.c.link.option.ldflags.929856570" name="Linker flags" superClass="gnu.c.link.option.ldflags" value="-Wl,-rpath=/home/chaunm/Working/ZigbeeHost/demo-actor/src/lib/lib-ssl" valueType="string"/>
 								<inputType id="cdt.managedbuild.tool.gnu.c.linker.input.649004109" superClass="cdt.managedbuild.tool.gnu.c.linker.input">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
 									<additionalInput kind="additionalinput" paths="$(LIBS)"/>
