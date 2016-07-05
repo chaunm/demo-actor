@@ -28,10 +28,10 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/universal/typesdef.h}&quot;"/>
 								</option>
 								<option id="gnu.c.compiler.option.include.paths.1847169076" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" useByScannerDiscovery="false" valueType="includePath">
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/demo-actor/src/universal}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/demo-actor/src/lib/jansson}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/demo-actor/src/lib/lib-mosquitto}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/demo-actor/src/lib/uuid/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/universal}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/lib/jansson}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/lib/lib-mosquitto}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/lib/uuid/include}&quot;"/>
 								</option>
 								<option id="gnu.c.compiler.option.preprocessor.def.symbols.1699404011" name="Defined symbols (-D)" superClass="gnu.c.compiler.option.preprocessor.def.symbols" useByScannerDiscovery="false" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="PI_RUNNING"/>
@@ -50,11 +50,11 @@
 									<listOptionValue builtIn="false" srcPrefixMapping="" srcRootPath="" value="uuid"/>
 								</option>
 								<option id="gnu.c.link.option.paths.1326333030" name="Library search path (-L)" superClass="gnu.c.link.option.paths" valueType="libPaths">
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/demo-actor/src/lib/jansson}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/demo-actor/src/lib/uuid/lib}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/demo-actor/src/lib/lib-mosquitto}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/lib/jansson}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/lib/uuid/lib}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/lib/lib-mosquitto}&quot;"/>
 								</option>
-								<option id="gnu.c.link.option.ldflags.929856570" name="Linker flags" superClass="gnu.c.link.option.ldflags" value="-Wl,-rpath=/home/chaunm/Working/ZigbeeHost/demo-actor/src/lib/lib-ssl" valueType="string"/>
+								<option id="gnu.c.link.option.ldflags.929856570" name="Linker flags" superClass="gnu.c.link.option.ldflags" value="-Wl,-rpath=${workspace_loc:/${ProjName}/src/lib/lib-ssl}" valueType="string"/>
 								<inputType id="cdt.managedbuild.tool.gnu.c.linker.input.649004109" superClass="cdt.managedbuild.tool.gnu.c.linker.input">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
 									<additionalInput kind="additionalinput" paths="$(LIBS)"/>
