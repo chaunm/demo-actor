@@ -16,6 +16,7 @@
 #include <mosquitto.h>
 #include "actor.h"
 #include "common/ActorParser.h"
+#include "universal.h"
 
 PACTOR pPingActor;
 PACTOR pPongActor;
@@ -26,6 +27,7 @@ void PingActorResponseCallback(void* pParam)
 	char* pingSendTopic;
 	char* pingSendMessage;
 
+	printf("response callback\n");
 	char* message = (char*)pParam;
 	char** pingSplitMessage = ActorSplitMessage(message);
 	if (pingSplitMessage == NULL) return;
@@ -35,8 +37,8 @@ void PingActorResponseCallback(void* pParam)
 	json_decref(messageJson);
 	pingSendMessage = json_dumps(pingSendJson, JSON_INDENT(4));
 	printf("Receive response from Pong\n");
-	pingSendTopic = ActorMakeTopicName(pPongActor->guid, "/:request/bonjour");
-	ActorSend(pPingActor, pingSendTopic, pingSendMessage, PingActorResponseCallback, TRUE);
+	pingSendTopic = ActorMakeTopicName("action/", pPongActor->guid, "/bonjour");
+	ActorSend(pPingActor, pingSendTopic, pingSendMessage, PingActorResponseCallback, TRUE, pingSendTopic);
 	free(pingSendMessage);
 	free(pingSendTopic);
 	json_decref(pingSendJson);
@@ -71,7 +73,7 @@ void PongActorRequestCallback(void* pParam)
 		return;
 	}
 	printf("receive request from %s\n", json_string_value(jsonFrom));
-	sendTopic = ActorMakeTopicName(json_string_value(jsonFrom), "/:response");
+	sendTopic = StrDup(json_string_value(jsonFrom));
 	json_decref(jsonFrom);
 	printf("Send response to topic %s \n", sendTopic);
 	responseJson = json_object();
@@ -80,7 +82,7 @@ void PongActorRequestCallback(void* pParam)
 	json_object_set(responseJson, "message", messageJson);
 	json_decref(messageJson);
 	sendMessage = json_dumps(responseJson, JSON_INDENT(4));
-	ActorSend(pPongActor, sendTopic, sendMessage, NULL, TRUE);
+	ActorSend(pPongActor, sendTopic, sendMessage, NULL, TRUE, "response");
 	free(sendTopic);
 	free(sendMessage);
 	json_decref(jsonHeader);
@@ -108,8 +110,8 @@ int main()
 	json_decref(messageJson);
 	pingSendMessage = json_dumps(pingSendJson, JSON_INDENT(4));
 	json_decref(pingSendJson);
-	ActorRegisterCallback(pPongActor, ":request/bonjour", PongActorRequestCallback, CALLBACK_RETAIN);
-	pingSendTopic = ActorMakeTopicName(pPongActor->guid, "/:request/bonjour");
+	ActorRegisterCallback(pPongActor, "action/system/pong/bonjour", PongActorRequestCallback, CALLBACK_RETAIN);
+	pingSendTopic = ActorMakeTopicName("action/", pPongActor->guid, "/bonjour");
 	while(1)
 	{
 		ActorProcessEvent(pPingActor);
@@ -118,9 +120,9 @@ int main()
 		mosquitto_loop(pPongActor->client, 0, 1);
 		if(FirstSend == FALSE)
 		{
-			printf("send initialize message\n");
+			printf("send initialize message to topi %s\n", pingSendTopic);
 			FirstSend = TRUE;
-			ActorSend(pPingActor, pingSendTopic, pingSendMessage, PingActorResponseCallback, TRUE);
+			ActorSend(pPingActor, pingSendTopic, pingSendMessage, PingActorResponseCallback, TRUE, "action/system/pong/bonjour");
 			free(pingSendMessage);
 			free(pingSendTopic);
 		}
