@@ -101,8 +101,8 @@ int main()
 	/* Mosquitto library init */
 	mosquitto_lib_init();
 	/* Create actor to start communication */
-	pPongActor = ActorCreate("system/pong", "ping", NULL, 0);
-	pPingActor = ActorCreate("system/ping", "ping", NULL, 0);
+	pPongActor = ActorCreate("system/pong", "ping", "taskforce.techphys.com.vn", 8883);
+	pPingActor = ActorCreate("system/ping", "ping", "taskforce.techphys.com.vn", 8883);
 	if ((pPingActor == NULL) || (pPongActor == NULL)) return 1;
 	/* make message for the first time  */
 	json_t* messageJson = json_string("Holla");
@@ -118,9 +118,9 @@ int main()
 		ActorProcessEvent(pPongActor);
 		mosquitto_loop(pPingActor->client, 0, 1);
 		mosquitto_loop(pPongActor->client, 0, 1);
-		if(FirstSend == FALSE)
+		if((FirstSend == FALSE) && (pPongActor->connected == 1) && (pPingActor->connected == 1))
 		{
-			printf("send initialize message to topi %s\n", pingSendTopic);
+			printf("send initialize message to topic %s\n", pingSendTopic);
 			FirstSend = TRUE;
 			ActorSend(pPingActor, pingSendTopic, pingSendMessage, PingActorResponseCallback, TRUE, "action/system/pong/bonjour");
 			free(pingSendMessage);

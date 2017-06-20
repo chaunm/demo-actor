@@ -211,9 +211,14 @@ void ActorDelete(PACTOR pActor)
 	free(pActor);
 }
 
+void ActorLogCallback(struct mosquitto *mosq, void *obj, int level, const char *str)
+{
+    printf("LOG: %s\n", str);
+}
+
 int ActorConnect(PACTOR pActor, char* guid, char* psw, char* inHost, WORD inPort)
 {
-
+	int status;
     int rc;
     struct mosquitto* client;
     WORD port;
@@ -230,11 +235,27 @@ int ActorConnect(PACTOR pActor, char* guid, char* psw, char* inHost, WORD inPort
     {
     	client = mosquitto_new(guid, TRUE, (void*)pActor);
     	pActor->client = client;
+    	// set tls option
+#ifdef PI_RUNNING
+    	status = mosquitto_tls_set(client, "/home/pi/client/ca.crt",
+    			NULL,
+				"/home/pi/client/client.crt",
+				"/home/pi/client/client.key", NULL);
+#else
+    	status = mosquitto_tls_set(client, "/home/chaunm/client/ca.crt",
+    			NULL,
+				"/home/chaunm/client/client.crt",
+				"/home/chaunm/client/client.key", NULL);
+#endif
+    	printf("%s set tsl %d\n", guid, status);
+    	status = mosquitto_tls_opts_set(client, 1, NULL, NULL);
+    	printf("%s set tsl opt %d\n", guid, status);
     	// Setting callback for connection
     	mosquitto_connect_callback_set(client, ActorOnConnect);
     	mosquitto_disconnect_callback_set(client, ActorOnOffline);
     	mosquitto_message_callback_set(client, ActorOnMessage);
     	mosquitto_publish_callback_set(client, ActorOnDelivered);
+    	mosquitto_log_callback_set(client, ActorLogCallback);
     	// set user and password if needed
     	if ((guid != NULL ) && (psw != NULL))
     		mosquitto_username_pw_set(client, guid, psw);
@@ -249,11 +270,13 @@ int ActorConnect(PACTOR pActor, char* guid, char* psw, char* inHost, WORD inPort
     //printf("id: %s, password: %s\n", guid, psw);
     pActor->connected = 0;
     rc = mosquitto_connect(client, host, port, 60);
+    printf("%s connect to %s:%d , status %d\n", pActor->guid, pActor->host,
+    				pActor->port, rc);
     if (rc != MOSQ_ERR_SUCCESS)
     {
         mosquitto_destroy(client);
         pActor->client = NULL;
-        //printf("%s Failed to connect, return code %d\n", guid, rc);
+        printf("%s Failed to connect, return code %d\n", guid, rc);
     }
     free(host);
     return rc;
@@ -522,6 +545,8 @@ void ActorOnOffline(struct mosquitto* client, void * context, int cause)
 	while (rc != MOSQ_ERR_SUCCESS)
 	{
 		rc = ActorConnect(pActor, pActor->guid, pActor->psw, pActor->host, pActor->port);
+		printf("%s connect to %s:%d , status %d\n", ((PACTOR)context)->guid, ((PACTOR)context)->host,
+				((PACTOR)context)->port, rc);
 		sleep(5);
 	}
 }
