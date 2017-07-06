@@ -235,6 +235,15 @@ int ActorConnect(PACTOR pActor, char* guid, char* psw, char* inHost, WORD inPort
     {
     	client = mosquitto_new(guid, TRUE, (void*)pActor);
     	pActor->client = client;
+
+    	// Setting callback for connection
+    	mosquitto_connect_callback_set(client, ActorOnConnect);
+    	mosquitto_disconnect_callback_set(client, ActorOnOffline);
+    	mosquitto_message_callback_set(client, ActorOnMessage);
+    	mosquitto_publish_callback_set(client, ActorOnDelivered);
+#ifdef MQTT_LOG
+    	mosquitto_log_callback_set(client, ActorLogCallback);
+#endif
     	// set tls option
 #ifdef PI_RUNNING
     	status = mosquitto_tls_set(client, "/home/pi/client/ca.crt",
@@ -250,12 +259,6 @@ int ActorConnect(PACTOR pActor, char* guid, char* psw, char* inHost, WORD inPort
     	printf("%s set tsl %d\n", guid, status);
     	status = mosquitto_tls_opts_set(client, 1, NULL, NULL);
     	printf("%s set tsl opt %d\n", guid, status);
-    	// Setting callback for connection
-    	mosquitto_connect_callback_set(client, ActorOnConnect);
-    	mosquitto_disconnect_callback_set(client, ActorOnOffline);
-    	mosquitto_message_callback_set(client, ActorOnMessage);
-    	mosquitto_publish_callback_set(client, ActorOnDelivered);
-    	mosquitto_log_callback_set(client, ActorLogCallback);
     	// set user and password if needed
     	if ((guid != NULL ) && (psw != NULL))
     		mosquitto_username_pw_set(client, guid, psw);
@@ -278,6 +281,8 @@ int ActorConnect(PACTOR pActor, char* guid, char* psw, char* inHost, WORD inPort
         pActor->client = NULL;
         printf("%s Failed to connect, return code %d\n", guid, rc);
     }
+    //else
+    	//ActorOnConnect(client, (void*)pActor, 0);
     free(host);
     return rc;
 }
@@ -349,7 +354,7 @@ void ActorReceive(PACTOR pActor, char* topicName, char* payload)
 	int i;
 	char* TopicNameAct;
 	char** TopicNameSplit;
-	char** messageSplit;
+	//char** messageSplit;
 	char* pParamMessage;
 	char* messageContent;
 	json_t* receiveJsonMessage;
@@ -383,22 +388,22 @@ void ActorReceive(PACTOR pActor, char* topicName, char* payload)
 	// Primary topic processing
 	if (strcmp(topicName, pActor->guid) == 0)
 	{
-		//split message into header and content;
-		messageSplit = ActorSplitMessage(payload);
-		if (messageSplit == NULL)
-		{
-			if (*TopicNameSplit)
-			{
-				for (i = 0; *(TopicNameSplit + i); i++)
-				{
-					free(*(TopicNameSplit + i));
-				}
-				free(TopicNameSplit);
-			}
-			return;
-		}
+//		split message into header and content;
+//		messageSplit = ActorSplitMessage(payload);
+//		if (messageSplit == NULL)
+//		{
+//			if (*TopicNameSplit)
+//			{
+//				for (i = 0; *(TopicNameSplit + i); i++)
+//				{
+//					free(*(TopicNameSplit + i));
+//				}
+//				free(TopicNameSplit);
+//			}
+//			return;
+//		}
 		// assume that message content is the 2nd json message
-		messageContent = messageSplit[1];
+		messageContent = payload;
 		receiveJsonMessage = json_loads(messageContent, JSON_DECODE_ANY, NULL);
 		if (receiveJsonMessage == NULL)
 		{
@@ -410,7 +415,7 @@ void ActorReceive(PACTOR pActor, char* topicName, char* payload)
 				}
 				free(TopicNameSplit);
 			}
-			ActorFreeSplitMessage(messageSplit);
+//			ActorFreeSplitMessage(messageSplit);
 			return;
 		}
 		json_t* messageTypeJson = json_object_get(receiveJsonMessage, "type");
@@ -425,7 +430,7 @@ void ActorReceive(PACTOR pActor, char* topicName, char* payload)
 				}
 				free(TopicNameSplit);
 			}
-			ActorFreeSplitMessage(messageSplit);
+//			ActorFreeSplitMessage(messageSplit);
 			return;
 		}
 		// parsing response message
@@ -444,7 +449,7 @@ void ActorReceive(PACTOR pActor, char* topicName, char* payload)
 					}
 					free(TopicNameSplit);
 				}
-				ActorFreeSplitMessage(messageSplit);
+//				ActorFreeSplitMessage(messageSplit);
 				return;
 			}
 			// should check id before get
@@ -462,7 +467,7 @@ void ActorReceive(PACTOR pActor, char* topicName, char* payload)
 					}
 					free(TopicNameSplit);
 				}
-				ActorFreeSplitMessage(messageSplit);
+//				ActorFreeSplitMessage(messageSplit);
 				return;
 			}
 			json_t* requestIdJson = json_object_get(headerJson, "id");
@@ -480,7 +485,7 @@ void ActorReceive(PACTOR pActor, char* topicName, char* payload)
 					}
 					free(TopicNameSplit);
 				}
-				ActorFreeSplitMessage(messageSplit);
+//				ActorFreeSplitMessage(messageSplit);
 				return;
 			}
 			pParamMessage = StrDup(payload);
@@ -498,7 +503,7 @@ void ActorReceive(PACTOR pActor, char* topicName, char* payload)
 		}
 		json_decref(messageTypeJson);
 		json_decref(receiveJsonMessage);
-		ActorFreeSplitMessage(messageSplit);
+//		ActorFreeSplitMessage(messageSplit);
 	}
 
 	// free allocated memory

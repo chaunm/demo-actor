@@ -28,9 +28,9 @@ void PingActorResponseCallback(void* pParam)
 	char* pingSendMessage;
 
 	printf("response callback\n");
-	char* message = (char*)pParam;
-	char** pingSplitMessage = ActorSplitMessage(message);
-	if (pingSplitMessage == NULL) return;
+	//char* message = (char*)pParam;
+	//char** pingSplitMessage = ActorSplitMessage(message);
+	//if (pingSplitMessage == NULL) return;
 	json_t* pingSendJson = json_object();
 	json_t* messageJson = json_string("Holla");
 	json_object_set(pingSendJson, "message", messageJson);
@@ -43,38 +43,39 @@ void PingActorResponseCallback(void* pParam)
 	free(pingSendTopic);
 	json_decref(pingSendJson);
 	nResponseCount++;
-	ActorFreeSplitMessage(pingSplitMessage);
+	//ActorFreeSplitMessage(pingSplitMessage);
 	printf("Response count %d\n", nResponseCount);
 }
 
 void PongActorRequestCallback(void* pParam)
 {
 	char* message = (char*)pParam;
-	char* sendTopic;
+	//char* sendTopic;
 	char* sendMessage;
-	const char* messageHeader;
+//	const char* messageHeader;
 	const char* messageContent;
-	char** messageSplit;
+	//char** messageSplit;
 
 	if (message == NULL) return;
 
-	messageSplit = ActorSplitMessage(message);
-	if (messageSplit == NULL) return;
-	messageHeader = (messageSplit[0]);
-	messageContent = (messageSplit[1]);
-
+//	messageSplit = ActorSplitMessage(message);
+//	if (messageSplit == NULL) return;
+//	messageHeader = (messageSplit[0]);
+//	messageContent = (messageSplit[1]);
+	messageContent = message;
 	json_t* jsonContent = json_loads(messageContent, JSON_DECODE_ANY, NULL);
-	json_t* jsonHeader = json_loads(messageHeader, JSON_DECODE_ANY, NULL);
-	json_t* jsonFrom = json_object_get(jsonHeader, "from");
+//	json_t* jsonHeader = json_loads(messageHeader, JSON_DECODE_ANY, NULL);
+//	json_t* jsonFrom = json_object_get(jsonHeader, "from");
 	json_t* responseJson;
 	// assume that json parse success
-	if (jsonFrom == NULL){
-		//ActorFreeSplitMessage(messageSplit);
-		return;
-	}
-	printf("receive request from %s\n", json_string_value(jsonFrom));
-	sendTopic = StrDup(json_string_value(jsonFrom));
-	json_decref(jsonFrom);
+//	if (jsonFrom == NULL){
+//		//ActorFreeSplitMessage(messageSplit);
+//		return;
+//	}
+//	printf("receive request from %s\n", json_string_value(jsonFrom));
+//	sendTopic = StrDup(json_string_value(jsonFrom));
+//	json_decref(jsonFrom);
+	char* sendTopic = "system/ping";
 	printf("Send response to topic %s \n", sendTopic);
 	responseJson = json_object();
 	json_object_set(responseJson, "request", jsonContent);
@@ -83,12 +84,12 @@ void PongActorRequestCallback(void* pParam)
 	json_decref(messageJson);
 	sendMessage = json_dumps(responseJson, JSON_INDENT(4));
 	ActorSend(pPongActor, sendTopic, sendMessage, NULL, TRUE, "response");
-	free(sendTopic);
+	//free(sendTopic);
 	free(sendMessage);
-	json_decref(jsonHeader);
+	//json_decref(jsonHeader);
 	json_decref(jsonContent);
 	json_decref(responseJson);
-	ActorFreeSplitMessage(messageSplit);
+	//ActorFreeSplitMessage(messageSplit);
 	return;
 }
 
