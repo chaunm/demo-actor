@@ -245,6 +245,7 @@ int ActorConnect(PACTOR pActor, char* guid, char* psw, char* inHost, WORD inPort
     	mosquitto_log_callback_set(client, ActorLogCallback);
 #endif
     	// set tls option
+#ifdef TLS_ENABLE
 #ifdef PI_RUNNING
     	status = mosquitto_tls_set(client, "/home/pi/client/ca.crt",
     			NULL,
@@ -259,6 +260,7 @@ int ActorConnect(PACTOR pActor, char* guid, char* psw, char* inHost, WORD inPort
     	printf("%s set tsl %d\n", guid, status);
     	status = mosquitto_tls_opts_set(client, 1, NULL, NULL);
     	printf("%s set tsl opt %d\n", guid, status);
+#endif // TLS_ENABLE
     	// set user and password if needed
     	if ((guid != NULL ) && (psw != NULL))
     		mosquitto_username_pw_set(client, guid, psw);
