@@ -248,13 +248,13 @@ int ActorConnect(PACTOR pActor, char* guid, char* psw, char* inHost, WORD inPort
 #ifdef PI_RUNNING
     	status = mosquitto_tls_set(client, "/home/pi/client/ca.crt",
     			NULL,
-				"/home/pi/client/client.crt",
-				"/home/pi/client/client.key", NULL);
+				"/home/pi/client/chau-nm@hotmail.com.crt",
+				"/home/pi/client/chau-nm@hotmail.com.key", NULL);
 #else
     	status = mosquitto_tls_set(client, "/home/chaunm/client/ca.crt",
     			NULL,
-				"/home/chaunm/client/client.crt",
-				"/home/chaunm/client/client.key", NULL);
+				"/home/chaunm/client/chau-nm@hotmail.com.crt",
+				"/home/chaunm/client/chau-nm@hotmail.com.key", NULL);
 #endif
     	printf("%s set tsl %d\n", guid, status);
     	status = mosquitto_tls_opts_set(client, 1, NULL, NULL);
