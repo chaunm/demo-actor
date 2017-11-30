@@ -102,8 +102,10 @@ int main()
 	/* Mosquitto library init */
 	mosquitto_lib_init();
 	/* Create actor to start communication */
+
 	pPongActor = ActorCreate("system/pong", "ping", "192.168.1.19", 8883);
 	pPingActor = ActorCreate("system/ping", "ping", "192.168.1.19", 8883);
+
 	if ((pPingActor == NULL) || (pPongActor == NULL)) return 1;
 	/* make message for the first time  */
 	json_t* messageJson = json_string("Holla");

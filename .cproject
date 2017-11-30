@@ -101,6 +101,7 @@
 								</option>
 								<option id="gnu.c.compiler.option.preprocessor.def.symbols.1210577519" name="Defined symbols (-D)" superClass="gnu.c.compiler.option.preprocessor.def.symbols" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="PC_RUNNING"/>
+									<listOptionValue builtIn="false" value="TLS_ENABLE"/>
 								</option>
 								<option id="gnu.c.compiler.option.include.files.528772799" name="Include files (-include)" superClass="gnu.c.compiler.option.include.files" valueType="includeFiles">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/universal/typesdef.h}&quot;"/>

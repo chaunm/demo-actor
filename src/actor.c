@@ -16,6 +16,10 @@
 #include "common/ActorParser.h"
 #include "unistd.h"
 
+#ifdef TLS_ENABLE
+static char* encryptedKeyPass = "c1h9a8u6";
+#endif
+
 int ActorConnect(PACTOR pACtor, char* guid, char* psw, char* inPost, WORD inPort);
 void ActorOnMessage(struct mosquitto* client, void* context, const struct mosquitto_message* message);
 void ActorOnOffline(struct mosquitto* client, void * context, int cause);
@@ -36,6 +40,13 @@ static void ActorOnRequestStop(PVOID pParam)
 	sleep(5);
 	exit(EXIT_SUCCESS);
 }
+#ifdef TLS_ENABLE
+static int ActorPswCallback(char* buffer, int size, int rwflag, void* userdata)
+{
+	strncpy(buffer, encryptedKeyPass, size);
+	return sizeof(encryptedKeyPass);
+}
+#endif
 
 char* ActorMakeGuid(char* prefix)
 {
@@ -245,6 +256,7 @@ int ActorConnect(PACTOR pActor, char* guid, char* psw, char* inHost, WORD inPort
     	mosquitto_log_callback_set(client, ActorLogCallback);
 #endif
     	// set tls option
+#ifdef TLS_ENABLE
 #ifdef PI_RUNNING
     	status = mosquitto_tls_set(client, "/home/pi/client/ca.crt",
     			NULL,
@@ -253,12 +265,14 @@ int ActorConnect(PACTOR pActor, char* guid, char* psw, char* inHost, WORD inPort
 #else
     	status = mosquitto_tls_set(client, "/home/chaunm/client/ca.crt",
     			NULL,
-				"/home/chaunm/client/chau-nm@hotmail.com.crt",
-				"/home/chaunm/client/chau-nm@hotmail.com.key", NULL);
+				"/home/chaunm/client/client.crt",
+				"/home/chaunm/client/client.key",
+				ActorPswCallback);
 #endif
     	printf("%s set tsl %d\n", guid, status);
     	status = mosquitto_tls_opts_set(client, 1, NULL, NULL);
     	printf("%s set tsl opt %d\n", guid, status);
+#endif // TLS_ENABLE
     	// set user and password if needed
     	if ((guid != NULL ) && (psw != NULL))
     		mosquitto_username_pw_set(client, guid, psw);
